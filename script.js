@@ -23,6 +23,7 @@ clear.addEventListener("click", () => {
 });
 
 clearOne.addEventListener("click", () => {
-  screen.value = screen.value.split("");
-  console.log(screen.value);
+  let inputValue = screen.value.split("");
+  inputValue.pop();
+  screen.value = inputValue.join("");
 });

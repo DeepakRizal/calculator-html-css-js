@@ -1,0 +1,30 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-container {
+  margin-bottom: 5px;
+}
+.screen-container .screen {
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: right;
+  cursor: none;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.btn {
+  padding: 8px 0;
+  cursor: pointer;
+}
+.btn:nth-child(17) {
+  grid-column: span 2;
+}

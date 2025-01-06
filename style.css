@@ -1,8 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: black;
+}
+.calculator {
+  background-color: grey;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .screen-container {

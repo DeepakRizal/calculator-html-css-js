@@ -12,7 +12,7 @@ const equalsTo = document.querySelector(".equalsTo");
 
 Array.from(buttons).forEach((btn) => {
   btn.addEventListener("click", () => {
-    if (btn.textContent !== "X") {
+    if (btn.textContent !== "X" && btn.textContent !== "=") {
       screen.value += btn.textContent;
     }
   });
@@ -26,4 +26,42 @@ clearOne.addEventListener("click", () => {
   let inputValue = screen.value.split("");
   inputValue.pop();
   screen.value = inputValue.join("");
+});
+
+equalsTo.addEventListener("click", () => {
+  let operator = [];
+  const valueToCalculate = screen.value.split("");
+  for (let number of valueToCalculate) {
+    if (isNaN(number)) {
+      operator.push(number);
+    } else if (number === "÷") {
+      operator[valueToCalculate.indexOf(number)] = "/";
+    }
+  }
+
+  const numbers = screen.value.split("*" || "+" || "-" || "/");
+  const number1 = Number(numbers[0]);
+  const number2 = Number(numbers[1]);
+
+  let result;
+
+  if (operator.length === 1) {
+    if (operator[0] === "*") {
+      result = number1 * number2;
+    } else if (operator[0] === "+") {
+      result = number1 + number2;
+    } else if (operator[0] === "-") {
+      result = number1 - number2;
+    } else if (operator[0] === "+") {
+      result = number1 + number2;
+    } else if (operator === "/") {
+      if (number2 !== 0) {
+        result = number1 / number2;
+      } else {
+        result = "Error: Division by zero!";
+      }
+    }
+  }
+
+  screen.value = result;
 });

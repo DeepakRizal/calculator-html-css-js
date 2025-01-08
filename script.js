@@ -29,39 +29,61 @@ clearOne.addEventListener("click", () => {
 });
 
 equalsTo.addEventListener("click", () => {
-  let operator = [];
-  const valueToCalculate = screen.value.split("");
-  for (let number of valueToCalculate) {
-    if (isNaN(number)) {
-      operator.push(number);
-    } else if (number === "÷") {
-      operator[valueToCalculate.indexOf(number)] = "/";
-    }
+  const expression = screen.value.replace(/÷/g, "/"); // Replace division symbol with `/`
+
+  try {
+    const result = evaluateExpression(expression);
+    screen.value = result;
+  } catch (error) {
+    screen.value = "Error";
   }
-
-  const numbers = screen.value.split("*" || "+" || "-" || "/");
-  const number1 = Number(numbers[0]);
-  const number2 = Number(numbers[1]);
-
-  let result;
-
-  if (operator.length === 1) {
-    if (operator[0] === "*") {
-      result = number1 * number2;
-    } else if (operator[0] === "+") {
-      result = number1 + number2;
-    } else if (operator[0] === "-") {
-      result = number1 - number2;
-    } else if (operator[0] === "+") {
-      result = number1 + number2;
-    } else if (operator === "/") {
-      if (number2 !== 0) {
-        result = number1 / number2;
-      } else {
-        result = "Error: Division by zero!";
-      }
-    }
-  }
-
-  screen.value = result;
 });
+
+function evaluateExpression(expression) {
+  const numbers = [];
+  const operators = [];
+  let currentNumber = "";
+
+  for (let char of expression) {
+    if (!isNaN(char) || char === ".") {
+      // Build the current number
+      currentNumber += char;
+    } else {
+      // Push the completed number and the operator
+      if (currentNumber !== "") {
+        numbers.push(parseFloat(currentNumber));
+        currentNumber = "";
+      }
+      operators.push(char);
+    }
+  }
+
+  // Push the last number
+  if (currentNumber !== "") {
+    numbers.push(parseFloat(currentNumber));
+  }
+
+  // Evaluate based on operator precedence
+  const precedence = { "/": 2, "*": 2, "+": 1, "-": 1 };
+
+  // Function to perform calculation
+  const calculate = (a, b, op) => {
+    if (op === "+") return a + b;
+    if (op === "-") return a - b;
+    if (op === "*") return a * b;
+    if (op === "/") return b !== 0 ? a / b : "Error: Division by zero!";
+  };
+
+  // Process higher precedence operators first
+  for (let op of Object.keys(precedence)) {
+    while (operators.includes(op)) {
+      const index = operators.indexOf(op);
+      const result = calculate(numbers[index], numbers[index + 1], op);
+      numbers.splice(index, 2, result); // Replace two numbers with the result
+      operators.splice(index, 1); // Remove the operator
+    }
+  }
+
+  // Final result
+  return numbers[0];
+}
